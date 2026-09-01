@@ -1,0 +1,35 @@
+{
+  "data": {
+    "name": "organamnist64",
+    "root": "data",
+    "split": "test"
+  },
+  "elapsed_seconds": 7.907010014000207,
+  "environment": {
+    "diffusers": "0.40.0",
+    "lpips": "0.1.4",
+    "numpy": "2.5.2",
+    "scikit-image": "0.26.0",
+    "scipy": "1.18.1",
+    "torch": "2.7.1+cu126",
+    "torch-fidelity": "0.3.0",
+    "torchvision": "0.22.1+cu126"
+  },
+  "fid": 454.83103516717307,
+  "fid_excess": 5.508660340374888,
+  "fid_floor": 449.3223748267982,
+  "prior_id": "b5b3e9045b7173ecf10cee4f23e019c44afbf16f75553c483c60fbfb264f4d3f",
+  "psnr": 11.557199394515527,
+  "samples": 4,
+  "scientific_pass": false,
+  "smoke": true,
+  "source_hash": "795a99180e3da4d679d7fbf79b5646a6d30b5205e2278b687902ff70598fefb4",
+  "status": "SMOKE_PASS",
+  "steps": 20,
+  "thresholds": {
+    "fid_excess_max": 150.0,
+    "fid_max": 200.0,
+    "psnr_min": 15.0
+  },
+  "validation_hash": "0338c0473cea124dcdc0a7bd917d1aa009e7dc141f9f7bdda9bb96ebb816c254"
+}

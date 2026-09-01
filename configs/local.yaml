@@ -1,0 +1,37 @@
+tier: local
+device: auto
+seed: 0
+data:
+  name: organamnist64
+  root: data
+  split: test
+prior:
+  kind: cifar
+  model_id: google/ddpm-cifar10-32
+  revision: main
+  cache_dir: .cache/huggingface
+sampling:
+  steps: 100
+  batch_size: 1
+  eta: 0.0
+  zeta: 0.1
+  dps_loss: norm
+  lambda: 1.0
+  pigdm_scale: 1.0
+  final_consistency: false
+operator:
+  mask: cartesian_random
+  acceleration: 4
+  acs_lines: 8
+  sigma: 0.03
+sweep:
+  solvers: [zero_filled, tv, dps, diffpir, pigdm]
+  axes:
+    mask: [0.0, 0.125, 0.25]
+    noise: [-1.0, 0.0, 1.0]
+    sensitivity: [0.0, 0.25, 0.5]
+  seeds: [0, 1, 2]
+  image_ids: [0, 1, 2, 3]
+  tv_weight: 0.02
+  tv_iterations: 200
+output: results/local

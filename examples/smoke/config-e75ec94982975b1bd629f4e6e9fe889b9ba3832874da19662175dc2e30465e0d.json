@@ -1,0 +1,85 @@
+{
+  "config": {
+    "data": {
+      "name": "organamnist64",
+      "root": "data",
+      "split": "test"
+    },
+    "device": "auto",
+    "operator": {
+      "acceleration": 4,
+      "acs_lines": 8,
+      "mask": "cartesian_random",
+      "sigma": 0.03
+    },
+    "output": "results/local/smoke",
+    "prior": {
+      "cache_dir": ".cache/huggingface",
+      "kind": "cifar",
+      "model_id": "google/ddpm-cifar10-32",
+      "revision": "main"
+    },
+    "sampling": {
+      "batch_size": 1,
+      "dps_loss": "norm",
+      "eta": 0.0,
+      "final_consistency": false,
+      "lambda": 1.0,
+      "pigdm_scale": 1.0,
+      "steps": 20,
+      "zeta": 0.1
+    },
+    "seed": 0,
+    "smoke": true,
+    "sweep": {
+      "axes": {
+        "mask": [
+          0.0,
+          0.125,
+          0.25
+        ],
+        "noise": [
+          -1.0,
+          0.0,
+          1.0
+        ],
+        "sensitivity": [
+          0.0,
+          0.25,
+          0.5
+        ]
+      },
+      "image_ids": [
+        0
+      ],
+      "seeds": [
+        0
+      ],
+      "solvers": [
+        "zero_filled",
+        "tv",
+        "dps",
+        "diffpir",
+        "pigdm"
+      ],
+      "tv_iterations": 8,
+      "tv_weight": 0.02
+    },
+    "tier": "local"
+  },
+  "config_hash": "e75ec94982975b1bd629f4e6e9fe889b9ba3832874da19662175dc2e30465e0d",
+  "data_hash": "ac6168d8c51a9220ff3b88b5de5c6038c357dcd1c8a36c2a1f201e2293e484e8",
+  "environment": {
+    "diffusers": "0.40.0",
+    "lpips": "0.1.4",
+    "numpy": "2.5.2",
+    "scikit-image": "0.26.0",
+    "scipy": "1.18.1",
+    "torch": "2.7.1+cu126",
+    "torch-fidelity": "0.3.0",
+    "torchvision": "0.22.1+cu126"
+  },
+  "git_commit": "uncommitted",
+  "prior_id": "b5b3e9045b7173ecf10cee4f23e019c44afbf16f75553c483c60fbfb264f4d3f",
+  "source_hash": "795a99180e3da4d679d7fbf79b5646a6d30b5205e2278b687902ff70598fefb4"
+}
