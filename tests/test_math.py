@@ -120,6 +120,26 @@ class TinyPrior:
         return .1*torch.tanh(x)
 
 
+class HighNoisePrior:
+    """A deliberately extreme first timestep for sampler-stability tests."""
+    alphas_cumprod = torch.cat((torch.full((999,), .999), torch.tensor([1e-8])))
+
+    def predict_eps(self, x, t):
+        return torch.zeros_like(x)
+
+
+@pytest.mark.parametrize("name", ["dps", "diffpir", "pigdm"])
+def test_guided_solvers_bound_high_noise_clean_estimates(name):
+    # A partially observed problem preserves null-space components.  Without
+    # clipping the Tweedie x0 estimate at abar=1e-8, those components reach
+    # O(1e4) and make all three guided samplers unusable.
+    op = FourierOperator(make_mask(8, acceleration=2, acs_lines=2), sigma=.02)
+    clean = torch.rand(1, 1, 8, 8)
+    result = SOLVERS[name](op(clean), op, HighNoisePrior(), dict(steps=2, seed=2, zeta=.1))
+    assert torch.isfinite(result).all()
+    assert result.abs().max() < 5
+
+
 @pytest.mark.parametrize("name", ["dps", "diffpir", "pigdm"])
 def test_all_solvers_full_noiseless_with_explicit_projection(name):
     # Projection is tested honestly as a wrapper; not proof of a trained prior.
@@ -145,7 +165,9 @@ def test_solvers_deterministic_and_use_measurements(name):
 def test_dps_retains_network_jacobian():
     from src.solvers.dps import update
     op = FourierOperator(torch.ones(4,4),sigma=.1)
-    x = torch.randn(1,1,4,4)
+    # Stay in the unsaturated x0 region: this test targets the epsilon-network
+    # Jacobian, while clipping is covered by the high-noise stability test.
+    x = .1*torch.randn(1,1,4,4)
     class Linear:
         def predict_eps(self,z,t):
             return .4*z

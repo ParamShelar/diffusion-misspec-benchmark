@@ -7,14 +7,14 @@ variant. Both are labeled in provenance; they are NOT algebraically identical.
 Network weights are frozen, but the full epsilon input Jacobian is retained.
 """
 import torch
-from .common import tweedie, ddim_step, run_guided
+from .common import bounded_tweedie, ddim_step, run_guided
 
 
 def update(x, t, a, ap, y, op, prior, c, generator):
     with torch.enable_grad():
         x = x.requires_grad_(True)
         eps = prior.predict_eps(x, t)
-        x0 = tweedie(x, eps, a)
+        x0 = bounded_tweedie(x, eps, a)
         norm = (y-op(x0)).abs().square().flatten(1).sum(1).clamp_min(1e-16).sqrt()
         kind = c.get("dps_loss", "norm")
         if kind not in ("norm", "squared"):

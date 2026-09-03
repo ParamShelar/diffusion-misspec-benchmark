@@ -6,13 +6,13 @@ Real-domain Fourier proximal is exact, including asymmetric masks. No CG or
 network gradients. Effective noise is recomputed after the proximal update.
 """
 import torch
-from .common import tweedie, run_guided
+from .common import bounded_tweedie, run_guided
 
 
 @torch.no_grad()
 def update(x, t, a, ap, y, op, prior, c, generator):
     eps = prior.predict_eps(x, t)
-    x0 = tweedie(x, eps, a)
+    x0 = bounded_tweedie(x, eps, a)
     rho = c.get("lambda", 1.) * op.sigma**2 / ((1-a)/a).clamp_min(1e-12)
     z = op.prox(x0, y, rho)
     effective_eps = (x-a.sqrt()*z)/(1-a).sqrt()

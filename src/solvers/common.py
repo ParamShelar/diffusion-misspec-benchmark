@@ -8,6 +8,18 @@ def tweedie(x, eps, abar):
     return (x - (1-abar).sqrt()*eps) / abar.sqrt()
 
 
+def bounded_tweedie(x, eps, abar):
+    """Predict the clean signed image and enforce its training-domain bounds.
+
+    At the high-noise end of a cosine schedule, ``abar`` is very small.  Even
+    a small epsilon-prediction error can therefore make the algebraic Tweedie
+    estimate enormous.  The unconditional sampler already uses this bounded
+    estimate; guided samplers must use the same estimate before applying a
+    data-consistency update.
+    """
+    return tweedie(x, eps, abar).clamp(-1, 1)
+
+
 def ddim_step(x0, eps, abar, previous, eta, generator):
     variance = ((1-previous)/(1-abar) * (1-abar/previous)).clamp_min(0)
     sigma = eta * variance.sqrt()
@@ -61,6 +73,6 @@ def sample(prior, count, steps, device, seed=0, x=None, start=None, deadline=Non
         ap = prior.alphas_cumprod[ts[i+1]].to(x) if i+1 < len(ts) else x.new_tensor(1.)
         eps = prior.predict_eps(x, t)
         # Prior sampling follows standard DDIM with a clipped denoised estimate.
-        x0 = tweedie(x, eps, a).clamp(-1, 1)
+        x0 = bounded_tweedie(x, eps, a)
         x = ddim_step(x0, eps, a, ap, 0., generator)
     return (x+1)/2

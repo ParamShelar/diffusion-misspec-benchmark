@@ -65,7 +65,7 @@ The solvers see only the assumed operator. Metrics report `||A_assumed*x-y||/||y
 
 ## Guidance math and deliberate qualifications
 
-The diffusion latent uses `u=2*x-1`. Before guidance, measurements are transformed exactly to `2*y-A(1)` and sigma to `2*sigma`; results are converted back once. Every solver uses the same timestep selection and Tweedie estimate.
+The diffusion latent uses `u=2*x-1`. Before guidance, measurements are transformed exactly to `2*y-A(1)` and sigma to `2*sigma`; results are converted back once. Every solver uses the same timestep selection and clips its Tweedie clean-image estimate to the prior's trained `[-1,1]` domain before a DDIM, proximal, or guidance update. This prevents the `1/sqrt(abar)` conversion from amplifying high-noise prediction error into unbounded reconstructions.
 
 **DPS:** the requested default subtracts `zeta/||r|| * grad ||r||` after a DDIM step, with autograd through epsilon prediction. This differs from the squared-residual gradient in [Chung et al., Algorithm 1](https://arxiv.org/html/2209.14687v2). Set `sampling.dps_loss: squared` for that variant. The requested normalized update does not explicitly use assumed sigma, so its noise-mismatch curve is flat; inventing sigma dependence would change the requested algorithm. Both variants are approximate samplers.
 
