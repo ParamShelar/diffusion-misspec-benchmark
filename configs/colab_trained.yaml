@@ -1,0 +1,44 @@
+# Research sweep against the trained OrganAMNIST64 prior.
+# The training notebook writes an equivalent generated copy as trained_sweep.yaml;
+# point prior.checkpoint at whichever EMA checkpoint passed the quality gate.
+tier: colab
+device: cuda
+seed: 0
+data:
+  name: organamnist64
+  root: /content/data
+  split: test
+prior:
+  kind: trained
+  checkpoint: /content/drive/MyDrive/ddpm-benchmark/organamnist64/checkpoints/step-000012033.pt
+sampling:
+  steps: 100
+  batch_size: 1
+  eta: 0.0
+  zeta: 0.1
+  dps_loss: norm
+  lambda: 1.0
+  pigdm_scale: 1.0
+  final_consistency: false
+operator:
+  mask: cartesian_random
+  acceleration: 4
+  acs_lines: 8
+  sigma: 0.03
+sweep:
+  solvers: [zero_filled, tv, dps, diffpir, pigdm]
+  axes:
+    mask: [0.0, 0.0625, 0.125, 0.1875, 0.25]
+    noise: [-2.0, -1.0, 0.0, 1.0, 2.0]
+    sensitivity: [0.0, 0.125, 0.25, 0.375, 0.5]
+  seeds: [0, 1, 2]
+  image_ids: [0, 1, 2, 3, 4, 5, 6, 7]
+  tv_weight: 0.02
+  tv_iterations: 200
+quality:
+  batch_size: 16
+training:
+  checkpoint_dir: /content/drive/MyDrive/ddpm-benchmark/organamnist64/checkpoints
+  batch_size: 128
+  quality_reserve_minutes: 45
+output: /content/drive/MyDrive/ddpm-benchmark/organamnist64

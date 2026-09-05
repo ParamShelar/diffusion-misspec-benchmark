@@ -1,0 +1,106 @@
+{
+  "config": {
+    "data": {
+      "name": "organamnist64",
+      "root": "/content/data",
+      "split": "test"
+    },
+    "device": "cuda",
+    "operator": {
+      "acceleration": 4,
+      "acs_lines": 8,
+      "mask": "cartesian_random",
+      "sigma": 0.03
+    },
+    "output": "/content/drive/MyDrive/ddpm-benchmark/organamnist64",
+    "prior": {
+      "checkpoint": "/content/drive/MyDrive/ddpm-benchmark/organamnist64/checkpoints/step-000012033.pt",
+      "kind": "trained"
+    },
+    "quality": {
+      "batch_size": 16
+    },
+    "sampling": {
+      "batch_size": 1,
+      "dps_loss": "norm",
+      "eta": 0.0,
+      "final_consistency": false,
+      "lambda": 1.0,
+      "pigdm_scale": 1.0,
+      "steps": 100,
+      "zeta": 0.1
+    },
+    "seed": 0,
+    "smoke": false,
+    "sweep": {
+      "axes": {
+        "mask": [
+          0.0,
+          0.0625,
+          0.125,
+          0.1875,
+          0.25
+        ],
+        "noise": [
+          -2.0,
+          -1.0,
+          0.0,
+          1.0,
+          2.0
+        ],
+        "sensitivity": [
+          0.0,
+          0.125,
+          0.25,
+          0.375,
+          0.5
+        ]
+      },
+      "image_ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "solvers": [
+        "zero_filled",
+        "tv",
+        "dps",
+        "diffpir",
+        "pigdm"
+      ],
+      "tv_iterations": 200,
+      "tv_weight": 0.02
+    },
+    "tier": "colab",
+    "training": {
+      "batch_size": 128,
+      "checkpoint_dir": "/content/drive/MyDrive/ddpm-benchmark/organamnist64/checkpoints",
+      "quality_reserve_minutes": 45
+    }
+  },
+  "config_hash": "d4edbcc97ec00f079508e13004cf8c0e01806e2a1c89e0eb93c0e8df45158196",
+  "data_hash": "ac6168d8c51a9220ff3b88b5de5c6038c357dcd1c8a36c2a1f201e2293e484e8",
+  "environment": {
+    "diffusers": "0.40.0",
+    "lpips": "0.1.4",
+    "numpy": "2.1.3",
+    "scikit-image": "0.25.2",
+    "scipy": "1.16.3",
+    "torch": "2.11.0+cu128",
+    "torch-fidelity": "0.3.0",
+    "torchvision": "0.26.0+cu128"
+  },
+  "git_commit": "3edb09d41378dfae155626fe72b75a2c4bde6a58",
+  "prior_id": "7e25783c0a7c26e9b9f205121679098986989cb4fa109a54923972afe75d60ce",
+  "source_hash": "cff553233941e75169564d196f318bbdd728713e0809f049f5ada55d92b57e1e"
+}
